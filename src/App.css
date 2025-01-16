@@ -1,0 +1,85 @@
+#root {
+  margin: 0 auto;
+  /* padding: 2rem; */
+  text-align: center;
+}
+
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+.layout-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+.sidebar {
+  width: 250px;
+  transition: width 0.3s;
+}
+
+.sidebar.collapsed {
+  width: 80px;
+}
+
+
+.layout-main {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-trigger {
+  /* position: absolute;
+  top: 10px;
+  left: 50px; */
+  z-index: 1000;
+  transition: left 0.3s;
+  text-align: left;
+}
+
+/*Calender styles */
+
+.react-calendar{
+  width: 100% !important;
+}
+
+/* Remove red color from weekends */
+.react-calendar__month-view__days__day--weekend {
+  color: inherit !important;  
+  /* background-color: inherit !important;   */
+}
+
+/* Customize holiday tile (if needed) */
+.holiday-tile {
+  color: orange !important;
+  font-weight: bold;
+}
+
+.weekend-tile{
+  color: red !important;
+  font-weight: bolod;
+}
+
+/* Custom CSS to position the drawer on the right */
+.drawer-right .drawer-content {
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-out;
+}
+
+/* When the drawer is open, it should be positioned normally */
+.drawer-right[open] .drawer-content {
+  transform: translateX(0);
+}
