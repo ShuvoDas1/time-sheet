@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -11,13 +11,25 @@ import MonthlyCalender from "@/components/MonthlyCalender";
 import { holidayList } from "@/assets/fakeData";
 
 import DateStatus from "@/components/DateStatus";
+import { useCalendar } from "@/context/CalendarContext";
 
 const EmployWorkSchedule = () => {
   const [dayDetails, setDayDetails] = useState({
     date: new Date(),
     holidayEvent: "",
     status: "",
-  }); // State to manage drawer visibility
+  });
+
+  const { calendarData, setTimeSheetData } = useCalendar();
+
+  // SET TIME SHEET DATA
+
+  useEffect(() => {
+    const { timesheetData } = calendarData;
+    if (timesheetData.length < 1) {
+      setTimeSheetData();
+    }
+  }, [calendarData, setTimeSheetData]);
 
   // Format date function
   const formatDate = (date) => {
@@ -29,20 +41,21 @@ const EmployWorkSchedule = () => {
 
   // Update day information
   const updateDayInfo = (selectedDate) => {
+    const { holidays, weekendDay } = calendarData;
+
     const data = {
       date: selectedDate,
       holidayEvent: "",
       status: "",
     };
-    const holiday = holidayList.find(
+
+    const holiday = holidays.find(
       ({ date }) => date === formatDate(selectedDate)
     );
     if (holiday) {
       data.holidayEvent = holiday?.eventName;
       data.status = "holiday";
-    }
-
-    if (selectedDate.getDay() === 5) {
+    } else if (selectedDate.getDay() === weekendDay) {
       data.status = "weekend";
     }
 
@@ -55,7 +68,9 @@ const EmployWorkSchedule = () => {
   // Set Current day details
   useEffect(() => {
     let mount = true;
-    if (mount) updateDayInfo(new Date());
+    if (mount) {
+      updateDayInfo(new Date());
+    }
 
     return () => (mount = false);
   }, []);

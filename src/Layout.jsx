@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { AppSidebar } from "./components/AppSidebar";
 import { SidebarTrigger } from "./components/ui/sidebar";
+import { Toaster } from "./components/ui/sonner";
 
 export function Layout({ children }) {
   const [collapsed, setCollapsed] = useState(false);
@@ -19,6 +20,7 @@ export function Layout({ children }) {
 
         {children}
       </main>
+      <Toaster />
     </div>
   );
 }
