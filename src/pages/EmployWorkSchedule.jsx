@@ -10,17 +10,17 @@ import {
 import MonthlyCalender from "@/components/MonthlyCalender";
 import { holidayList } from "@/assets/fakeData";
 
-import DateStatus from "@/components/DateStatus";
+import DayStatusPreview from "@/components/DayStatusPreview";
 import { useCalendar } from "@/context/CalendarContext";
+import moment from "moment";
 
 const EmployWorkSchedule = () => {
-  const [dayDetails, setDayDetails] = useState({
-    date: new Date(),
-    holidayEvent: "",
-    status: "",
-  });
-
-  const { calendarData, setTimeSheetData } = useCalendar();
+  const {
+    calendarData,
+    setTimeSheetData,
+    statusList: { working, holiday, weekend, sickLeave, vacation },
+    setDayDetails,
+  } = useCalendar();
 
   // SET TIME SHEET DATA
 
@@ -41,28 +41,34 @@ const EmployWorkSchedule = () => {
 
   // Update day information
   const updateDayInfo = (selectedDate) => {
-    const { holidays, weekendDay } = calendarData;
+    const { holidays, weekendDay, activeMonthData } = calendarData;
+    const formattedDate = formatDate(selectedDate);
 
-    const data = {
-      date: selectedDate,
-      holidayEvent: "",
-      status: "",
-    };
-
-    const holiday = holidays.find(
-      ({ date }) => date === formatDate(selectedDate)
-    );
-    if (holiday) {
-      data.holidayEvent = holiday?.eventName;
-      data.status = "holiday";
+    const holidayData = holidays.find(({ date }) => date === formattedDate);
+    if (holidayData) {
+      setDayDetails({
+        date: selectedDate,
+        holidayEvent: holidayData?.eventName,
+        status: holiday,
+      });
     } else if (selectedDate.getDay() === weekendDay) {
-      data.status = "weekend";
+      setDayDetails({
+        date: selectedDate,
+        status: weekend,
+      });
+    } else {
+      let selectedDayInfo = null;
+      if (activeMonthData.length > 0) {
+        const dayData = activeMonthData.find(
+          ({ date }) => date === formattedDate
+        );
+        selectedDayInfo = dayData || {
+          date: selectedDate,
+          status: "",
+        };
+      }
+      setDayDetails(selectedDayInfo);
     }
-
-    setDayDetails((prev) => ({
-      ...prev,
-      ...data,
-    }));
   };
 
   // Set Current day details
@@ -89,7 +95,7 @@ const EmployWorkSchedule = () => {
       />
 
       {/* Day Details Card */}
-      <DateStatus dayDetails={dayDetails} formatDate={formatDate} />
+      <DayStatusPreview />
     </div>
   );
 };

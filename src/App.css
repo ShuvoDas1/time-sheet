@@ -50,6 +50,21 @@
 
 .react-calendar{
   width: 100% !important;
+  padding: 15px 0;
+}
+
+.react-calendar__tile {
+  position: relative;
+  padding: 10px;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+}
+
+.react-calendar__tile > svg {
+  position: absolute;
+  top: 8px;
+  /* right: 4px; */
+  left: 30%;
 }
 
 /* Remove red color from weekends */
@@ -60,22 +75,27 @@
 
 .tile{
   font-size: 15px !important;
+  font-weight: bold !important;
 }
 
 /* Customize holiday tile (if needed) */
 .holiday-tile {
   color: orange !important;
-  font-weight: bold;
 }
 
 /* Weekend date  */
 .weekend-tile{
   color: red !important;
-  font-weight: bolod;
 }
 
-.working-tile{
+.working-tile {
   color: green !important;
-  font-weight: bold;
 }
 
+.vacation-tile{
+  color: purple !important;
+}
+
+.sick-leave-tile{
+  color: yellow !important
+}
