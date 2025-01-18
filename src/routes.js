@@ -1,26 +1,13 @@
-import Dashboard from "./pages/Dashboard";
-import EmployWorkSchedule from "./pages/EmployWorkSchedule";
-
-import {
-  Menu,
-  Home,
-  FileText,
-  Settings,
-  ChevronLeft,
-  ChevronRight,
-  Calendar,
-} from "lucide-react";
+import { Home, Calendar } from "lucide-react";
 
 const allRoutes = [
   {
     url: "/",
-    page: Dashboard,
     title: "Dashboard",
     icon: Calendar,
   },
   {
-    url: "/employee-calender",
-    page: EmployWorkSchedule,
+    url: "/timesheet",
     title: "Employee Calendar",
     icon: Home,
   },

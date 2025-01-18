@@ -36,78 +36,85 @@ export const CalendarProvider = ({ children }) => {
     sickNote: "",
   });
 
-  // SAVE NEW DATA
-  const saveData = async (payload) => {
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+
+  const setTimeSheetData = useCallback(async () => {
     setLoading(true);
-    let message = "";
     try {
-      const response = await axios.post(
-        "http://localhost:3001/timesheet",
-        payload
-      );
-
-      if (!response.data) {
-        throw new Error("Data could not be saved!");
-      }
-
-      setTimeSheetData();
-      message = "Successfully submitted";
-      return {
-        responseStatus: true,
-        message,
-      };
+      const response = await axios.get("http://localhost:3001/timesheet");
+      setCalendarData((prev) => ({
+        ...prev,
+        timesheetData: response.data,
+      }));
+      return { responseStatus: true, message: "Data set successfully" };
     } catch (error) {
-      message = error?.message || "Something went wrong";
       return {
         responseStatus: false,
-        message,
+        message: error?.message || "Something went wrong",
       };
     } finally {
       setLoading(false);
-      toast(message);
     }
-  };
+  }, []);
 
-  // UPDATE EXISTING DATA
-  const updateData = async (payload) => {
-    setLoading(true);
-    let message = "";
-    try {
-      const response = await axios.put(
-        `http://localhost:3001/timesheet/${payload.id}`,
-        payload
-      );
+  // Memoize fetch and update functions
+  const saveData = useCallback(
+    async (payload) => {
+      setLoading(true);
+      let message = "";
+      try {
+        const response = await axios.post(
+          "http://localhost:3001/timesheet",
+          payload
+        );
+        if (!response.data) throw new Error("Data could not be saved!");
 
-      if (!response.data) {
-        throw new Error("Data could not be saved!");
+        setTimeSheetData(); // Refresh the timesheet data after saving
+        message = "Successfully submitted";
+        return { responseStatus: true, message };
+      } catch (error) {
+        message = error?.message || "Something went wrong";
+        return { responseStatus: false, message };
+      } finally {
+        setLoading(false);
+        toast(message);
       }
-      setTimeSheetData();
-      message = "Successfully submitted";
-      return {
-        responseStatus: true,
-        message,
-      };
-    } catch (error) {
-      message = error?.message || "Something went wrong";
-      return {
-        responseStatus: false,
-        message: message,
-        data: null,
-      };
-    } finally {
-      setLoading(false);
-      toast(message);
-    }
-  };
+    },
+    [setTimeSheetData]
+  );
 
-  // GET DATA BY YEAR AND MONTH
-  const fetchMonthData = async (id) => {
+  const updateData = useCallback(
+    async (payload) => {
+      setLoading(true);
+      let message = "";
+      try {
+        const response = await axios.put(
+          `http://localhost:3001/timesheet/${payload.id}`,
+          payload
+        );
+        if (!response.data) throw new Error("Data could not be saved!");
+
+        setTimeSheetData(); // Refresh the timesheet data after updating
+        message = "Successfully submitted";
+        return { responseStatus: true, message };
+      } catch (error) {
+        message = error?.message || "Something went wrong";
+        return { responseStatus: false, message };
+      } finally {
+        setLoading(false);
+        toast(message);
+      }
+    },
+    [setTimeSheetData]
+  );
+
+  const fetchMonthData = useCallback(async (id) => {
     setLoading(true);
     try {
       const response = await axios.get(`http://localhost:3001/timesheet/${id}`);
       return {
         status: true,
-        message: "data get Successfully",
+        message: "Data fetched successfully",
         data: response.data,
       };
     } catch (error) {
@@ -119,80 +126,57 @@ export const CalendarProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  // SET ALL DATA
-
-  const setTimeSheetData = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(`http://localhost:3001/timesheet`);
-      setCalendarData((prev) => ({
-        ...prev,
-        timesheetData: response.data,
-      }));
-      return {
-        reponseStatus: true,
-        message: "Set Data successfully",
-      };
-    } catch (error) {
-      return {
-        reponseStatus: false,
-        message: error?.message || "Something went wrong",
-      };
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // A Day data submit
-  const saveSingleDayStatus = async (id, payload) => {
-    setLoading(true);
-    let message = "";
-    let success = false;
-    try {
-      const { data } = await fetchMonthData(id);
-      console.log(id);
-      if (data) {
-        const existDay = data.days.find((item) => item?.date === payload.date);
-        let updateDays = [];
-
-        if (existDay) {
-          updateDays = data.days.map((day) =>
-            day.date === existDay.date ? { ...day, ...payload } : day
+  const saveSingleDayStatus = useCallback(
+    async (id, payload) => {
+      setLoading(true);
+      let message = "";
+      try {
+        const { data } = await fetchMonthData(id);
+        if (data) {
+          const existDay = data.days.find(
+            (item) => item?.date === payload.date
           );
+          let updatedDays = [];
+
+          if (existDay) {
+            updatedDays = data.days.map((day) =>
+              day.date === existDay.date ? { ...day, ...payload } : day
+            );
+          } else {
+            updatedDays = [...data.days, payload];
+          }
+
+          const { responseStatus } = await updateData({
+            id,
+            days: updatedDays,
+          });
+          if (responseStatus) {
+            setTimeSheetData();
+            const utcDate = new Date(payload?.date);
+            setDayDetails({ ...payload, date: utcDate });
+          }
         } else {
-          updateDays = [...data.days, payload];
+          const { responseStatus } = await saveData({ id, days: [payload] });
+          if (responseStatus) {
+            setTimeSheetData();
+            const utcDate = new Date(payload?.date);
+            setDayDetails({ ...payload, date: utcDate });
+          }
         }
-        const { responseStatus } = await updateData({ id, days: updateDays });
-        success = responseStatus;
-      } else {
-        const { responseStatus } = await saveData({ id, days: [payload] });
-        success = responseStatus;
-      }
 
-      if (success) {
-        setTimeSheetData();
-        const utcDate = new Date(payload?.date);
-        setDayDetails({ ...payload, date: utcDate });
-        return {
-          reponseStatus: true,
-          message: "Save Data successfully",
-        };
+        return { responseStatus: true, message: "Data saved successfully" };
+      } catch (error) {
+        message = error?.message || "Something went wrong";
+        return { responseStatus: false, message };
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      message = error?.message || "Something went wrong";
-      return {
-        reponseStatus: false,
-        message,
-      };
-    } finally {
-      setLoading(false);
-      // toast(message);
-    }
-  };
+    },
+    [fetchMonthData, saveData, updateData, setTimeSheetData]
+  );
 
-  // Check Date is Holiday
   const checkHoliday = (date) => {
     const { holidays } = calendarData;
     const formattedDate = moment(date).format("y-MM-DD");
@@ -200,15 +184,12 @@ export const CalendarProvider = ({ children }) => {
     return holiday ? true : false;
   };
 
-  // Get all working days in this month
-
   const getWorkingDaysOfMonth = (activeStartDate, status = "") => {
     const workingDays = [];
     const { holidays, weekendDay } = calendarData;
 
     const month = activeStartDate.getMonth();
     const year = activeStartDate.getFullYear();
-
     const selectedDate = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0).getDate();
 
@@ -232,44 +213,38 @@ export const CalendarProvider = ({ children }) => {
         });
       }
     }
-    const totalWorkingDays = workingDays.length;
 
-    return { workingDays, totalWorkingDays };
+    return { workingDays, totalWorkingDays: workingDays.length };
   };
-
-  // SET Tile Content
 
   const tileContent = (date) => {
     const day = date.getDay();
     const isTodayHoliday = checkHoliday(date);
     const { weekendDay, activeMonthData } = calendarData;
-    const { working, vacation, sickLeave } = statusList;
+    const { vacation, working, sickLeave } = statusList;
     let icon = null;
+
     if (day === weekendDay) {
-      icon = <Umbrella className="text-yellow-500 w-3 h-3" />;
+      icon = <Umbrella className="text-yellow-500 w-4 h-4" />;
     } else if (isTodayHoliday) {
-      icon = <Gift className="text-blue-500 w-3 h-3" />;
+      icon = <Gift className="text-blue-500 w-4 h-4" />;
     } else {
       const formattedDate = moment(date).format("y-MM-DD");
-      if (activeMonthData && activeMonthData.length > 0) {
-        const foundData = activeMonthData.find(
-          (item) => item?.date === formattedDate
-        );
-        if (foundData) {
-          const { status } = foundData;
-          icon =
-            status === working ? (
-              <Briefcase className="text-green-500  w-3 h-3" />
-            ) : status === vacation ? (
-              <Plane className="text-indigo-500 w-3 h-3" />
-            ) : status === sickLeave ? (
-              <Heart className="text-red-500 w-3 h-3" />
-            ) : (
-              ""
-            );
+      const foundData = activeMonthData?.find(
+        (item) => item?.date === formattedDate
+      );
+      if (foundData) {
+        const { status } = foundData;
+        if (status === working) {
+          icon = <Briefcase className="text-green-500 w-4 h-4" />;
+        } else if (status === vacation) {
+          icon = <Plane className="text-indigo-500 w-4 h-4" />;
+        } else if (status === sickLeave) {
+          icon = <Heart className="text-red-500 w-4 h-4" />;
         }
       }
     }
+
     return <div className="flex justify-center mt-2">{icon}</div>;
   };
 
@@ -297,6 +272,8 @@ export const CalendarProvider = ({ children }) => {
         getWorkingDaysOfMonth,
         tileContent,
         monthKeyGenerate,
+        setCurrentMonth,
+        currentMonth,
       }}
     >
       {children}

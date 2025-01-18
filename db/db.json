@@ -5,103 +5,11 @@
       "days": [
         {
           "date": "2025-01-02",
-          "status": "working"
-        },
-        {
-          "date": "2025-01-04",
-          "status": "working"
-        },
-        {
-          "date": "2025-01-05",
-          "status": "working"
-        },
-        {
-          "date": "2025-01-06",
-          "status": "working"
-        },
-        {
-          "date": "2025-01-07",
-          "status": "working"
-        },
-        {
-          "date": "2025-01-08",
-          "status": "working"
-        },
-        {
-          "date": "2025-01-09",
           "status": "vacation"
         },
         {
-          "date": "2025-01-11",
-          "status": "working"
-        },
-        {
-          "date": "2025-01-12",
-          "status": "working"
-        },
-        {
-          "date": "2025-01-13",
-          "status": "working"
-        },
-        {
-          "date": "2025-01-14",
-          "status": "working"
-        },
-        {
-          "date": "2025-01-15",
-          "status": "working"
-        },
-        {
-          "date": "2025-01-16",
-          "status": "working"
-        },
-        {
-          "date": "2025-01-18",
-          "status": "working"
-        },
-        {
-          "date": "2025-01-19",
-          "status": "working"
-        },
-        {
-          "date": "2025-01-20",
-          "status": "working"
-        },
-        {
-          "date": "2025-01-21",
-          "status": "working"
-        },
-        {
-          "date": "2025-01-22",
-          "status": "working"
-        },
-        {
-          "date": "2025-01-23",
-          "status": "working"
-        },
-        {
-          "date": "2025-01-25",
-          "status": "working"
-        },
-        {
-          "date": "2025-01-26",
-          "status": "working"
-        },
-        {
-          "date": "2025-01-27",
-          "status": "working"
-        },
-        {
-          "date": "2025-01-28",
-          "status": "working"
-        },
-        {
-          "date": "2025-01-29",
-          "status": "working"
-        },
-        {
-          "date": "2025-01-30",
-          "status": "working"
+          "date": "2025-01-04",
+          "status": "vacation"
         }
       ]
     },
@@ -110,12 +18,319 @@
       "days": [
         {
           "date": "2025-02-01",
+          "status": "working"
+        },
+        {
+          "date": "2025-02-02",
+          "status": "working"
+        },
+        {
+          "date": "2025-02-03",
+          "status": "working"
+        },
+        {
+          "date": "2025-02-04",
+          "status": "working"
+        },
+        {
+          "date": "2025-02-05",
+          "status": "working"
+        },
+        {
+          "date": "2025-02-06",
           "status": "vacation"
         },
         {
           "date": "2025-02-08",
-          "status": "sick-leave",
-          "sickNote": "weak"
+          "status": "working"
+        },
+        {
+          "date": "2025-02-09",
+          "status": "working"
+        },
+        {
+          "date": "2025-02-10",
+          "status": "working"
+        },
+        {
+          "date": "2025-02-11",
+          "status": "working"
+        },
+        {
+          "date": "2025-02-12",
+          "status": "working"
+        },
+        {
+          "date": "2025-02-13",
+          "status": "sick-leave"
+        },
+        {
+          "date": "2025-02-15",
+          "status": "working"
+        },
+        {
+          "date": "2025-02-16",
+          "status": "working"
+        },
+        {
+          "date": "2025-02-17",
+          "status": "working"
+        },
+        {
+          "date": "2025-02-18",
+          "status": "working"
+        },
+        {
+          "date": "2025-02-19",
+          "status": "working"
+        },
+        {
+          "date": "2025-02-20",
+          "status": "working"
+        },
+        {
+          "date": "2025-02-22",
+          "status": "working"
+        },
+        {
+          "date": "2025-02-23",
+          "status": "working"
+        },
+        {
+          "date": "2025-02-24",
+          "status": "working"
+        },
+        {
+          "date": "2025-02-25",
+          "status": "working"
+        },
+        {
+          "date": "2025-02-26",
+          "status": "working"
+        },
+        {
+          "date": "2025-02-27",
+          "status": "working"
+        }
+      ]
+    },
+    {
+      "id": "2027-02",
+      "days": [
+        {
+          "date": "2027-02-20",
+          "status": "vacation"
+        }
+      ]
+    },
+    {
+      "id": "2025-03",
+      "days": [
+        {
+          "date": "2025-03-01",
+          "status": "working"
+        },
+        {
+          "date": "2025-03-02",
+          "status": "working"
+        },
+        {
+          "date": "2025-03-03",
+          "status": "working"
+        },
+        {
+          "date": "2025-03-04",
+          "status": "working"
+        },
+        {
+          "date": "2025-03-05",
+          "status": "working"
+        },
+        {
+          "date": "2025-03-06",
+          "status": "working"
+        },
+        {
+          "date": "2025-03-08",
+          "status": "working"
+        },
+        {
+          "date": "2025-03-09",
+          "status": "working"
+        },
+        {
+          "date": "2025-03-10",
+          "status": "working"
+        },
+        {
+          "date": "2025-03-11",
+          "status": "working"
+        },
+        {
+          "date": "2025-03-12",
+          "status": "working"
+        },
+        {
+          "date": "2025-03-13",
+          "status": "working"
+        },
+        {
+          "date": "2025-03-15",
+          "status": "working"
+        },
+        {
+          "date": "2025-03-16",
+          "status": "working"
+        },
+        {
+          "date": "2025-03-17",
+          "status": "working"
+        },
+        {
+          "date": "2025-03-18",
+          "status": "working"
+        },
+        {
+          "date": "2025-03-19",
+          "status": "working"
+        },
+        {
+          "date": "2025-03-20",
+          "status": "working"
+        },
+        {
+          "date": "2025-03-22",
+          "status": "working"
+        },
+        {
+          "date": "2025-03-23",
+          "status": "working"
+        },
+        {
+          "date": "2025-03-24",
+          "status": "working"
+        },
+        {
+          "date": "2025-03-25",
+          "status": "working"
+        },
+        {
+          "date": "2025-03-26",
+          "status": "working"
+        },
+        {
+          "date": "2025-03-27",
+          "status": "working"
+        }
+      ]
+    },
+    {
+      "id": "2025-05",
+      "days": [
+        {
+          "date": "2025-05-01",
+          "status": "working"
+        },
+        {
+          "date": "2025-05-03",
+          "status": "working"
+        },
+        {
+          "date": "2025-05-04",
+          "status": "working"
+        },
+        {
+          "date": "2025-05-05",
+          "status": "working"
+        },
+        {
+          "date": "2025-05-06",
+          "status": "working"
+        },
+        {
+          "date": "2025-05-07",
+          "status": "working"
+        },
+        {
+          "date": "2025-05-08",
+          "status": "working"
+        },
+        {
+          "date": "2025-05-10",
+          "status": "working"
+        },
+        {
+          "date": "2025-05-11",
+          "status": "working"
+        },
+        {
+          "date": "2025-05-12",
+          "status": "working"
+        },
+        {
+          "date": "2025-05-13",
+          "status": "working"
+        },
+        {
+          "date": "2025-05-14",
+          "status": "working"
+        },
+        {
+          "date": "2025-05-15",
+          "status": "working",
+          "workHour": "5"
+        },
+        {
+          "date": "2025-05-17",
+          "status": "working"
+        },
+        {
+          "date": "2025-05-18",
+          "status": "working"
+        },
+        {
+          "date": "2025-05-19",
+          "status": "working"
+        },
+        {
+          "date": "2025-05-20",
+          "status": "working"
+        },
+        {
+          "date": "2025-05-21",
+          "status": "working"
+        },
+        {
+          "date": "2025-05-22",
+          "status": "working"
+        },
+        {
+          "date": "2025-05-24",
+          "status": "working"
+        },
+        {
+          "date": "2025-05-25",
+          "status": "working"
+        },
+        {
+          "date": "2025-05-26",
+          "status": "working"
+        },
+        {
+          "date": "2025-05-27",
+          "status": "working"
+        },
+        {
+          "date": "2025-05-28",
+          "status": "working"
+        },
+        {
+          "date": "2025-05-29",
+          "status": "working"
+        },
+        {
+          "date": "2025-05-31",
+          "status": "working"
         }
       ]
     }

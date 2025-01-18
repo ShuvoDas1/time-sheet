@@ -16,20 +16,9 @@ import DayStatusInputs from "./DayStatusInputs";
 import { useCalendar } from "@/context/CalendarContext";
 import { toast } from "sonner";
 
-import { Calculator, CreditCard, Settings, Smile, User } from "lucide-react";
-
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator,
-  CommandShortcut,
-} from "@/components/ui/command";
 import { Badge } from "./ui/badge";
 import Calendar from "react-calendar";
+import { Briefcase, Heart, Plane } from "lucide-react";
 
 const MonthDataSelector = ({ open, onClose }) => {
   const {
@@ -42,6 +31,8 @@ const MonthDataSelector = ({ open, onClose }) => {
     loading,
     saveData,
     monthKeyGenerate,
+    currentMonth,
+    statusList: { working, vacation, sickLeave },
   } = useCalendar();
 
   const [activeStartDate, setActiveStartDate] = useState(new Date());
@@ -58,16 +49,10 @@ const MonthDataSelector = ({ open, onClose }) => {
 
   const [submitData, setSubmitData] = useState([]);
 
-  //   GET MONTH KEY AND NUMBER OF WORKING DAYS
-  useEffect(() => {
-    const { totalWorkingDays } = getWorkingDaysOfMonth(activeStartDate);
-    const id = monthKeyGenerate(activeStartDate);
+  // //   GET MONTH KEY AND NUMBER OF WORKING DAYS
+  // useEffect(() => {
 
-    setMonthInfo({
-      totalWorkingDays,
-      id,
-    });
-  }, [activeStartDate]);
+  // }, [currentMonth]);
 
   //   HANDLE INPUT CHANGE EVENT
 
@@ -86,12 +71,12 @@ const MonthDataSelector = ({ open, onClose }) => {
     );
 
     const exists = submitData.some((item) => item?.date === singleData.date);
-
     if (exists) {
       setSubmitData(updatedData);
     } else {
       setSubmitData([...submitData, singleData]);
     }
+
     setSingleData({
       date: "",
       status: "",
@@ -103,14 +88,22 @@ const MonthDataSelector = ({ open, onClose }) => {
   //   Save Data
 
   const SubmitMonthData = useCallback(async () => {
-    const { id, totalWorkingDays } = monthInfo;
+    if (!currentMonth) {
+      return toast("Month was not found!");
+    }
+    const { totalWorkingDays } = getWorkingDaysOfMonth(currentMonth);
+    const id = monthKeyGenerate(currentMonth);
+    setMonthInfo({
+      totalWorkingDays,
+      id,
+    });
 
     if (!id || !totalWorkingDays || submitData.length < 1) {
       return toast("Invalid Request!");
     }
 
     if (totalWorkingDays !== submitData.length)
-      return toast("Please set All Date information!");
+      return toast("You haven’t marked all workdays!");
 
     const { status } = await fetchMonthData(id);
     let success = false;
@@ -125,7 +118,20 @@ const MonthDataSelector = ({ open, onClose }) => {
     if (success) {
       handleCloseModal();
     }
-  }, []);
+  }, [submitData]);
+
+  const getTileContent = (status) => {
+    let icon = null;
+    if (status === working) {
+      icon = <Briefcase className="text-green-500 w-4 h-4" />;
+    } else if (status === vacation) {
+      icon = <Plane className="text-indigo-500 w-4 h-4" />;
+    } else if (status === sickLeave) {
+      icon = <Heart className="text-red-500 w-4 h-4" />;
+    }
+
+    return icon;
+  };
 
   //   Handle Close Button Event
 
@@ -141,7 +147,7 @@ const MonthDataSelector = ({ open, onClose }) => {
   };
 
   return (
-    <Dialog open={open}>
+    <Dialog open={open} onOpenChange={onClose}>
       {/* <DialogTrigger asChild>
         <Button variant="outline">Select Date</Button>
       </DialogTrigger> */}
@@ -154,9 +160,9 @@ const MonthDataSelector = ({ open, onClose }) => {
         </DialogHeader>
         <div className="py-4">
           <Calendar
-            onActiveStartDateChange={({ activeStartDate }) =>
-              setActiveStartDate(activeStartDate)
-            }
+            // onActiveStartDateChange={({ activeStartDate }) =>
+            //   setActiveStartDate(activeStartDate)
+            // }
             onChange={(value) =>
               setSingleData({ date: moment(value).format("y-MM-DD") })
             }
@@ -173,6 +179,7 @@ const MonthDataSelector = ({ open, onClose }) => {
               {submitData?.map((item, index) => {
                 return (
                   <Badge key={index} variant="outline">
+                    {getTileContent(item?.status)}
                     {moment(item?.date).format("DD")}
                   </Badge>
                 );
@@ -182,7 +189,9 @@ const MonthDataSelector = ({ open, onClose }) => {
 
           <div className="border p-5 border-gray rounded my-3">
             {singleData?.date && (
-              <span>Date: {moment(singleData?.date).format("YYYY-MM-DD")}</span>
+              <span className="mt-3">
+                Date : {moment(singleData?.date).format("YYYY-MM-DD")}
+              </span>
             )}
 
             <DayStatusInputs
@@ -203,20 +212,11 @@ const MonthDataSelector = ({ open, onClose }) => {
               type="button"
               onClick={SubmitMonthData}
               className="w-full"
-              disabled={monthInfo?.totalWorkingDays !== submitData.length}
+              // disabled={monthInfo?.totalWorkingDays !== submitData.length}
             >
               {loading ? "Loading..." : "Submit"}
             </Button>
           </div>
-          <DialogClose asChild className="ml-3">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={handleCloseModal}
-            >
-              Close
-            </Button>
-          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>

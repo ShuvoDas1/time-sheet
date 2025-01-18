@@ -8,7 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useCalendar } from "@/context/CalendarContext";
+import { useCalendar } from "../context/CalendarContext";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 

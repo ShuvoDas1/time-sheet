@@ -12,13 +12,14 @@ export function ButtonWithTooltip({
   onClick,
   loading,
   className = "",
+  Icon = "",
 }) {
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
           <Button onClick={onClick} variant="outline" className={className}>
-            {loading ? "Submitting..." : `${buttonName}`}
+            {Icon} {loading ? "Submitting..." : `${buttonName}`}
           </Button>
         </TooltipTrigger>
         <TooltipContent>

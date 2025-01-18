@@ -11,59 +11,50 @@ import {
 import moment from "moment";
 import { useCalendar } from "@/context/CalendarContext";
 import DayStatusUpdate from "./DayStatusUpdate";
+import {
+  Command,
+  CommandGroup,
+  CommandItem,
+  CommandList,
+  CommandShortcut,
+} from "./ui/command";
 
-const DayStatusPreview = ({ selectedMonth }) => {
-  const {
-    statusList: { working, holiday, weekend, sickLeave, vacation },
-    dayDetails,
-  } = useCalendar();
+const DayStatusPreview = () => {
+  const { dayDetails } = useCalendar();
   return (
     <Card className="shadow-md rounded-lg border border-gray-300">
       <CardHeader>
         <CardTitle>Day Preview</CardTitle>
       </CardHeader>
-      <CardContent className="p-4">
-        {/* Date Display */}
-        <h5 className="font-semibold text-lg">
-          Selected Date: {moment(dayDetails?.date).format("MMMM Do YYYY")}
-        </h5>
+      <CardContent className="p-4 pt-0">
+        {/* Date And Status */}
+        <Command className="rounded-lg border shadow-md w-full">
+          <CommandList>
+            <CommandGroup>
+              {[
+                {
+                  title: "Selected Date",
+                  value: moment(dayDetails?.date).format("MMMM Do YYYY"),
+                },
+                { title: "Status", value: dayDetails?.status || "No Event" },
+              ].map(({ title, value }, index) => {
+                return (
+                  <CommandItem key={index}>
+                    <span>{title}</span>
+                    <CommandShortcut>{value}</CommandShortcut>
+                  </CommandItem>
+                );
+              })}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+
         {/* Holiday/Event Indicator */}
         {dayDetails?.holidayEvent && (
           <h5 className="font-medium text-md mt-2">
             {dayDetails?.holidayEvent}
           </h5>
         )}
-
-        {/* Status Indicator with Color */}
-        <div className="mt-4">
-          <div
-            className={`p-2 rounded-lg text-white ${
-              dayDetails?.status === holiday
-                ? "bg-blue-500"
-                : dayDetails?.status === vacation
-                ? "bg-purple-700"
-                : dayDetails?.status === sickLeave
-                ? "bg-red-500"
-                : dayDetails?.status === weekend
-                ? "bg-yellow-500"
-                : dayDetails?.status === working
-                ? "bg-green-500"
-                : "bg-black"
-            }`}
-          >
-            {dayDetails?.status === holiday
-              ? "Holiday"
-              : dayDetails?.status === vacation
-              ? "Vacation"
-              : dayDetails?.status === sickLeave
-              ? "Sick Leave"
-              : dayDetails?.status === weekend
-              ? "Weekend"
-              : dayDetails?.status === working
-              ? "Working"
-              : "No Event"}
-          </div>
-        </div>
 
         {/* If this day is not Holiday or Weekend  */}
         {!["weekend", "holiday"].includes(dayDetails?.status) && (

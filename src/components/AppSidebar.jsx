@@ -12,7 +12,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { allRoutes } from "@/routes";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 // Menu items
 // const items = [
@@ -35,13 +35,6 @@ export function AppSidebar() {
             <SidebarMenu>
               {allRoutes.map(({ url, title, icon: Icon }, index) => (
                 <SidebarMenuItem key={index}>
-                  {/* <SidebarMenuButton asChild>
-                    <a href={url}>
-                      <Icon />
-                      <span>{title}</span>
-                    </a>
-                    
-                  </SidebarMenuButton> */}
                   <NavLink
                     to={url}
                     className={({ isActive }) =>

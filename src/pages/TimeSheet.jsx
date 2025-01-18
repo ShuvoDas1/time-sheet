@@ -1,13 +1,11 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import MonthlyCalender from "@/components/MonthlyCalender";
-import { holidayList } from "@/assets/fakeData";
 
 import DayStatusPreview from "@/components/DayStatusPreview";
 import { useCalendar } from "@/context/CalendarContext";
 import moment from "moment";
-import { Briefcase, Gift, Heart, Plane, Umbrella } from "lucide-react";
 
-const EmployWorkSchedule = () => {
+const TimeSheet = () => {
   const {
     calendarData,
     setTimeSheetData,
@@ -21,8 +19,9 @@ const EmployWorkSchedule = () => {
     getWorkingDaysOfMonth,
     tileContent,
     monthKeyGenerate,
+    setCurrentMonth,
   } = useCalendar();
-
+  console.log("call from time sheet");
   // SET TIME SHEET DATA
 
   useEffect(() => {
@@ -40,7 +39,7 @@ const EmployWorkSchedule = () => {
     return `${year}-${month}-${day}`;
   };
 
-  // Update day information
+  // // Update day information
   const updateDayInfo = async (selectedDate) => {
     const { holidays, weekendDay, activeMonthData } = calendarData;
     const formattedDate = formatDate(selectedDate);
@@ -76,7 +75,7 @@ const EmployWorkSchedule = () => {
 
       if (data) {
         const dayData = data.days.find(({ date }) => date === formattedDate);
-        newDetails = { ...dayData, date: moment(dayData.date) };
+        if (dayData) newDetails = { ...dayData, date: moment(dayData.date) };
       } else {
         newDetails = {
           date: selectedDate,
@@ -92,7 +91,7 @@ const EmployWorkSchedule = () => {
     );
   };
 
-  // Set Current day details
+  // // Set Current day details
   useEffect(() => {
     let mount = true;
     if (mount) {
@@ -108,35 +107,37 @@ const EmployWorkSchedule = () => {
 
   const [selectedMonth, setSelectedMonth] = useState(new Date());
 
-  // Set All as working day button click event
+  // // Set All as working day button click event
 
-  const setAllAsWorkingDay = useCallback(async () => {
+  const setAllAsWorkingDay = async () => {
     const { workingDays } = getWorkingDaysOfMonth(selectedMonth, working);
     const key = monthKeyGenerate(selectedMonth);
 
     const { status } = await fetchMonthData(key);
 
     if (status) {
-      updateData({ id: key, days: workingDays });
+      const { responseStatus } = updateData({ id: key, days: workingDays });
     } else {
-      saveData({ id: key, days: workingDays });
+      const { responseStatus } = saveData({ id: key, days: workingDays });
     }
-  }, []);
+  };
 
-  // UPDATE CALENDAR
+  // // UPDATE CALENDAR
 
   useEffect(() => {
-    const key = monthKeyGenerate(selectedMonth);
+    if (selectedMonth) {
+      const key = monthKeyGenerate(selectedMonth);
 
-    const { timesheetData = [] } = calendarData;
-    if (timesheetData.length > 0) {
-      const monthlyData = timesheetData.find(({ id }) => id === key);
-      setCalendarData((prev) => ({
-        ...prev,
-        activeMonthData: monthlyData?.days || [],
-      }));
+      const { timesheetData = [] } = calendarData;
+      if (timesheetData.length > 0) {
+        const monthlyData = timesheetData.find(({ id }) => id === key);
+        setCalendarData((prev) => ({
+          ...prev,
+          activeMonthData: monthlyData?.days || [],
+        }));
+      }
     }
-  }, [selectedMonth, calendarData]);
+  }, [selectedMonth, calendarData?.timesheetData]);
 
   // SET EVERY DAY CLASS NAME
 
@@ -149,9 +150,10 @@ const EmployWorkSchedule = () => {
           value={new Date()}
           onChange={(value) => handlerDateChange(value)}
           tileContent={({ date }) => tileContent(date)}
-          selectMonth={({ activeStartDate }) =>
-            setSelectedMonth(activeStartDate)
-          }
+          selectMonth={({ activeStartDate }) => {
+            setSelectedMonth(activeStartDate);
+            setCurrentMonth(activeStartDate);
+          }}
           setAllAsWorkingDay={setAllAsWorkingDay}
         />
       </div>
@@ -159,9 +161,12 @@ const EmployWorkSchedule = () => {
       {/* Day Details Card */}
       <div className="flex-none w-full xl:w-4/12 mt-4 xl:mt-0 ml-0 xl:ml-2">
         <DayStatusPreview />
+
+        {/* STATUS LIST  */}
+        {/* <CommandData data={allStatus} heading="Status List" /> */}
       </div>
     </div>
   );
 };
 
-export default EmployWorkSchedule;
+export default TimeSheet;

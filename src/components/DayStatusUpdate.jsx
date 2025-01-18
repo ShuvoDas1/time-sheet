@@ -22,6 +22,9 @@ const DayStatusUpdate = () => {
     statusList: { working, vacation, sickLeave },
     dayDetails,
     saveSingleDayStatus,
+    monthKeyGenerate,
+    setCalendarData,
+    calendarData,
   } = useCalendar();
 
   const [submitData, setSubmitData] = useState({
@@ -53,7 +56,7 @@ const DayStatusUpdate = () => {
 
   //   SAVE DATA
 
-  const saveData = () => {
+  const handleSubmit = () => {
     const { date } = submitData;
     const month = new Date(date).getMonth();
     const year = new Date(date).getFullYear();
@@ -66,10 +69,12 @@ const DayStatusUpdate = () => {
 
   return (
     <div className="border border-gray rounded p-5">
+      <h4>Set Status</h4>
+      <hr />
       {/* INPUTS */}
       <DayStatusInputs data={submitData} handInputChange={handInputChange} />
 
-      <Button onClick={saveData} className="w-full mt-3  hover:bg-blue-600">
+      <Button onClick={handleSubmit} className="w-full mt-3  hover:bg-blue-600">
         Submit
       </Button>
     </div>
