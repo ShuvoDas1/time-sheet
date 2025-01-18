@@ -15,6 +15,7 @@ import { Label } from "./ui/label";
 import { toast } from "sonner";
 import moment from "moment";
 import { Textarea } from "./ui/textarea";
+import DayStatusInputs from "./DayStatusInputs";
 
 const DayStatusUpdate = () => {
   const {
@@ -24,7 +25,7 @@ const DayStatusUpdate = () => {
   } = useCalendar();
 
   const [submitData, setSubmitData] = useState({
-    date: new Date(),
+    date: "",
     status: "",
     workHour: 0,
     sickNote: "",
@@ -59,54 +60,14 @@ const DayStatusUpdate = () => {
     const id = `${year}-${String(month + 1).padStart(2, "0")}`;
     const { status } = saveSingleDayStatus(id, {
       ...submitData,
-      date: moment(date).format("Y-MM-DD"),
+      date: moment(date).format("y-MM-DD"),
     });
   };
 
   return (
-    <div>
-      <Select
-        value={submitData?.status}
-        required
-        onValueChange={(value) => handInputChange("status", value)}
-        name="status"
-      >
-        <SelectTrigger className="w-full">
-          <SelectValue placeholder="Select a Status" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectLabel>Fruits</SelectLabel>
-            <SelectItem value={working}>Working</SelectItem>
-            <SelectItem value={vacation}>Vacation</SelectItem>
-            <SelectItem value={sickLeave}>Sick Leave</SelectItem>
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-
-      {submitData?.status === working && (
-        <Input
-          className="mt-3"
-          type="number"
-          name="workHour"
-          id="workHour"
-          min={1}
-          placeholder="Enter Work Hour (Optional)"
-          onChange={(event) => handInputChange("workHour", event.target.value)}
-          value={submitData?.workHour || ""}
-        />
-      )}
-
-      {submitData?.status === sickLeave && (
-        <Textarea
-          className="mt-3"
-          name="sickNote"
-          id="sickNote"
-          placeholder="Enter Note"
-          onChange={(event) => handInputChange("sickNote", event.target.value)}
-          value={submitData?.sickNote || ""}
-        />
-      )}
+    <div className="border border-gray rounded p-5">
+      {/* INPUTS */}
+      <DayStatusInputs data={submitData} handInputChange={handInputChange} />
 
       <Button onClick={saveData} className="w-full mt-3  hover:bg-blue-600">
         Submit

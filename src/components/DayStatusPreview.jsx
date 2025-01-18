@@ -12,21 +12,20 @@ import moment from "moment";
 import { useCalendar } from "@/context/CalendarContext";
 import DayStatusUpdate from "./DayStatusUpdate";
 
-const DayStatusPreview = () => {
+const DayStatusPreview = ({ selectedMonth }) => {
   const {
     statusList: { working, holiday, weekend, sickLeave, vacation },
     dayDetails,
   } = useCalendar();
   return (
-    <Card className="flex-none w-3/12 ml-2 shadow-md rounded-lg border border-gray-300">
+    <Card className="shadow-md rounded-lg border border-gray-300">
       <CardHeader>
-        <CardTitle>Preview</CardTitle>
-        <CardDescription>Card Description</CardDescription>
+        <CardTitle>Day Preview</CardTitle>
       </CardHeader>
       <CardContent className="p-4">
         {/* Date Display */}
         <h5 className="font-semibold text-lg">
-          Date: {moment(dayDetails?.date).format("MMMM Do YYYY")}
+          Selected Date: {moment(dayDetails?.date).format("MMMM Do YYYY")}
         </h5>
         {/* Holiday/Event Indicator */}
         {dayDetails?.holidayEvent && (
