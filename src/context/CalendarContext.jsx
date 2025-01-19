@@ -1,4 +1,4 @@
-import { holidayList } from "@/assets/fakeData";
+import { holidayList } from "@/assets/ConstData";
 import axios from "axios";
 import { Briefcase, Gift, Heart, Plane, Umbrella } from "lucide-react";
 import moment from "moment";
@@ -13,12 +13,11 @@ export const useCalendar = () => {
 
 export const CalendarProvider = ({ children }) => {
   const [calendarData, setCalendarData] = useState({
-    weekendDay: 5,
+    weekendDay: 0,
     holidays: [...holidayList],
     timesheetData: [],
     activeMonthData: [],
   });
-  const [loading, setLoading] = useState(false);
 
   const statusList = {
     working: "working",
@@ -37,7 +36,9 @@ export const CalendarProvider = ({ children }) => {
   });
 
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [loading, setLoading] = useState(false);
 
+  // SET WORK STATUS DATA IN CALENDER
   const setTimeSheetData = useCallback(async () => {
     setLoading(true);
     try {
@@ -57,7 +58,7 @@ export const CalendarProvider = ({ children }) => {
     }
   }, []);
 
-  // Memoize fetch and update functions
+  //  CREATE  WORK STATUS FOR A MONTH
   const saveData = useCallback(
     async (payload) => {
       setLoading(true);
@@ -83,6 +84,7 @@ export const CalendarProvider = ({ children }) => {
     [setTimeSheetData]
   );
 
+  // UPDATE WORK STATUS FOR A MONTH
   const updateData = useCallback(
     async (payload) => {
       setLoading(true);
@@ -108,6 +110,7 @@ export const CalendarProvider = ({ children }) => {
     [setTimeSheetData]
   );
 
+  // GET DATA FOR A MONTH
   const fetchMonthData = useCallback(async (id) => {
     setLoading(true);
     try {
@@ -128,6 +131,7 @@ export const CalendarProvider = ({ children }) => {
     }
   }, []);
 
+  // SAVE SINGLE DAY STATUS
   const saveSingleDayStatus = useCallback(
     async (id, payload) => {
       setLoading(true);
@@ -177,6 +181,7 @@ export const CalendarProvider = ({ children }) => {
     [fetchMonthData, saveData, updateData, setTimeSheetData]
   );
 
+  // CHECK SELECTED DAY IS HOLIDAY OR NOT
   const checkHoliday = (date) => {
     const { holidays } = calendarData;
     const formattedDate = moment(date).format("y-MM-DD");
@@ -184,6 +189,7 @@ export const CalendarProvider = ({ children }) => {
     return holiday ? true : false;
   };
 
+  // GET WORKING DAYS OF THE SELECTED MONTH
   const getWorkingDaysOfMonth = (activeStartDate, status = "") => {
     const workingDays = [];
     const { holidays, weekendDay } = calendarData;
@@ -217,6 +223,7 @@ export const CalendarProvider = ({ children }) => {
     return { workingDays, totalWorkingDays: workingDays.length };
   };
 
+  // CALENDER TILE ICONS
   const tileContent = (date) => {
     const day = date.getDay();
     const isTodayHoliday = checkHoliday(date);
@@ -248,6 +255,7 @@ export const CalendarProvider = ({ children }) => {
     return <div className="flex justify-center mt-2">{icon}</div>;
   };
 
+  // KEY GENERATE FOR A MONTH
   const monthKeyGenerate = (date) => {
     const month = date.getMonth();
     const year = date.getFullYear();

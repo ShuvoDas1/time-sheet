@@ -6,6 +6,7 @@ import { useCalendar } from "@/context/CalendarContext";
 import { ButtonWithTooltip } from "./ButtonWithTooltip";
 import { Gift, Umbrella, Briefcase, Heart, Plane } from "lucide-react";
 import MonthDataSelector from "./MonthDataSelectorDialog";
+import RecurringStatus from "./RecurringStatusModal";
 
 // import { Calendar } from "@/components/ui/calendar";
 
@@ -42,6 +43,7 @@ const MonthlyCalender = ({
   const { checkHoliday, setCurrentMonth } = useCalendar();
 
   const [openModal, setOpenModal] = useState(false);
+  const [openRecurringModal, setRecurringOpenModal] = useState(false);
 
   return (
     <>
@@ -49,7 +51,7 @@ const MonthlyCalender = ({
         <CardHeader>
           <div className="flex flex-wrap justify-between items-center">
             {/* Left Section: Title */}
-            <div className="flex-1 text-left mb-2 sm:mb-0">
+            <div className="w-[100] text-left mb-2 sm:mb-0">
               <CardTitle>Work Calendar</CardTitle>
             </div>
 
@@ -66,6 +68,13 @@ const MonthlyCalender = ({
                 tooltipTitle="Exclude Holiday and Weekend"
                 onClick={() => {
                   setOpenModal((prev) => !prev);
+                }}
+              />
+              <ButtonWithTooltip
+                buttonName="Set Recurring Status"
+                tooltipTitle="Exclude Holiday and Weekend"
+                onClick={() => {
+                  setRecurringOpenModal((prev) => !prev);
                 }}
               />
             </div>
@@ -100,6 +109,11 @@ const MonthlyCalender = ({
       </Card>
       {/* MONTHLY WORKING DAYS STATUS MODAL */}
       <MonthDataSelector open={openModal} onClose={() => setOpenModal(false)} />
+      {/* RECURRING STATUS ET MODAL */}
+      <RecurringStatus
+        open={openRecurringModal}
+        onClose={() => setRecurringOpenModal(false)}
+      />
     </>
   );
 };

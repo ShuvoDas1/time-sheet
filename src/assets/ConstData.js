@@ -15,4 +15,63 @@ const holidayList = [
   { date: "2025-12-03", eventName: "National Day Holiday" },
 ];
 
-export { holidayList };
+const statusList = {
+  working: "working",
+  holiday: "holiday",
+  weekend: "weekend",
+  sickLeave: "sick-leave",
+  vacation: "vacation",
+};
+
+const months = [
+  {
+    key: "01",
+    title: "January",
+  },
+  {
+    key: "02",
+    title: "February",
+  },
+  {
+    key: "03",
+    title: "March",
+  },
+  {
+    key: "04",
+    title: "April",
+  },
+  {
+    key: "05",
+    title: "May",
+  },
+  {
+    key: "06",
+    title: "June",
+  },
+  {
+    key: "07",
+    title: "July",
+  },
+  {
+    key: "08",
+    title: "Auguest",
+  },
+  {
+    key: "09",
+    title: "Setember",
+  },
+  {
+    key: "10",
+    title: "October",
+  },
+  {
+    key: "11",
+    title: "November",
+  },
+  {
+    key: "12",
+    title: "December",
+  },
+];
+
+export { holidayList, statusList, months };

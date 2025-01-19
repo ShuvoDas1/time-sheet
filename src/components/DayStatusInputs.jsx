@@ -11,6 +11,7 @@ import {
 import { useCalendar } from "../context/CalendarContext";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
+import CustomSelect from "./CustomSelect";
 
 const DayStatusInputs = ({ data, handInputChange }) => {
   const {
@@ -21,24 +22,17 @@ const DayStatusInputs = ({ data, handInputChange }) => {
 
   return (
     <div className="mt-5">
-      <Select
-        value={data?.status || ""}
-        required
-        onValueChange={(value) => handInputChange("status", value)}
-        name="status"
-      >
-        <SelectTrigger className="w-full">
-          <SelectValue placeholder="Select a Status" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectLabel>Fruits</SelectLabel>
-            <SelectItem value={working}>Working</SelectItem>
-            <SelectItem value={vacation}>Vacation</SelectItem>
-            <SelectItem value={sickLeave}>Sick Leave</SelectItem>
-          </SelectGroup>
-        </SelectContent>
-      </Select>
+      <CustomSelect
+        value={data?.status}
+        setData={(value) => handInputChange("status", value)}
+        className="w-full"
+        label="Work Status"
+        options={[
+          { key: working, title: "Working" },
+          { key: vacation, title: "Vacation" },
+          { key: sickLeave, title: "Sick Leave" },
+        ]}
+      />
 
       {data?.status === working && (
         <Input
