@@ -118,3 +118,35 @@
   background: #989c9b !important;
   color: white !important;
 }
+
+/* globals.css */
+
+/* Light Mode */
+.light .react-calendar {
+  background-color: #fff !important; /* Light background */
+  color: #333 !important; /* Dark text */
+}
+
+.light .react-calendar__tile {
+  border-color: #e5e7eb !important; /* Light border */
+}
+
+.light .react-calendar__tile--active {
+  background-color: #3b82f6 !important; /* Blue for active tile */
+  color: #fff !important; /* White text for active tile */
+}
+
+/* Dark Mode */
+.dark .react-calendar {
+  background-color: #1a202c !important; /* Dark background */
+  color: #f7fafc !important; /* Light text */
+}
+
+.dark .react-calendar__tile {
+  border-color: #2d3748 !important; /* Darker border */
+}
+
+.dark .react-calendar__tile--active {
+  background-color: #38bdf8 !important; /* Light blue for active tile */
+  color: #fff !important; /* White text for active tile */
+}

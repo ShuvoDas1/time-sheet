@@ -16,6 +16,7 @@ import autoTable from "jspdf-autotable";
 import { useCalendar } from "@/context/CalendarContext";
 import { toast } from "sonner";
 import moment from "moment";
+import { useTheme } from "next-themes";
 
 const Dashboard = () => {
   const {
@@ -29,6 +30,8 @@ const Dashboard = () => {
     fetchMonthData,
     statusList: { working, vacation, sickLeave },
   } = useCalendar();
+
+  const { value: theme } = useTheme();
 
   useEffect(() => {
     if (filters.type && filters.month) {
@@ -102,7 +105,7 @@ const Dashboard = () => {
     <div className=" w-full px-4">
       {/* <CommonBreadcrumb pageName="Dashboard" /> */}
       <div className="container mx-auto p-6 space-y-6">
-        <div className="flex justify-between">
+        <div className="flex justify-between flex-wrap items-center">
           {/* Month Filter */}
           <CustomSelect
             value={filters?.month}
@@ -118,6 +121,7 @@ const Dashboard = () => {
             onClick={handleExportReport}
             Icon={<FileText className="text-blue-500  w-6 h-6" />}
             disabled={!filters.month}
+            className="mt-3 xl:mt-0 lg-mt:0"
           />
         </div>
 

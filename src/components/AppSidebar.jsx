@@ -28,13 +28,13 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="border-b-2 border-blue-500">
+          <SidebarGroupLabel className="border-b-2 border-blue-500 text-center">
             TIME SHEET
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {allRoutes.map(({ url, title, icon: Icon }, index) => (
-                <SidebarMenuItem key={index}>
+                <SidebarMenuItem key={index} className="mt-3">
                   <NavLink
                     to={url}
                     className={({ isActive }) =>

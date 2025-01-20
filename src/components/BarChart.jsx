@@ -9,6 +9,18 @@ import {
 } from "recharts";
 import CustomTooltip from "./CustomTooltip";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
+import { useEffect, useState } from "react";
+import { useTheme } from "@/context/ThemeProvider";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
+import { Label } from "./ui/label";
+import { Input } from "./ui/input";
+import { Select } from "./ui/select";
 
 const BarChartComponent = ({ data = [] }) => {
   const {
@@ -16,12 +28,35 @@ const BarChartComponent = ({ data = [] }) => {
     setFilters,
   } = useDashbaord();
 
+  const { value: theme } = useTheme();
+
+  const [barSize, setBarSize] = useState(50);
+
+  // Adjust barSize based on screen width
+  const updateBarSize = () => {
+    const width = window.innerWidth;
+    if (width <= 480) {
+      setBarSize(20);
+    } else if (width <= 768) {
+      setBarSize(30);
+    } else {
+      setBarSize(50);
+    }
+  };
+
+  useEffect(() => {
+    updateBarSize();
+    window.addEventListener("resize", updateBarSize);
+
+    return () => window.removeEventListener("resize", updateBarSize);
+  }, []);
+
   return (
-    <div className="p-6 bg-white rounded-lg shadow-md border  flex-1 mt-5">
-      <div className="flex justify-between items-center border-b mb-4">
-        <h3 className="text-lg font-semibold text-gray-700 mb-4">
+    <Card className="w-full mt-5">
+      <CardHeader className="flex justify-between items-center border-b mb-4 flex-wrap">
+        <CardTitle>
           Hours Worked per {`${type === "weekly" ? "Week" : "Day"}`}
-        </h3>
+        </CardTitle>
         {/* Filters*/}
         {data?.length > 0 && (
           <Tabs
@@ -29,7 +64,7 @@ const BarChartComponent = ({ data = [] }) => {
             onValueChange={(value) =>
               setFilters((prev) => ({ ...prev, type: value }))
             }
-            className="space-x-4"
+            className="my-2"
           >
             <TabsList>
               <TabsTrigger value="weekly">Weekly</TabsTrigger>
@@ -37,26 +72,27 @@ const BarChartComponent = ({ data = [] }) => {
             </TabsList>
           </Tabs>
         )}
-      </div>
-
-      {data.length < 1 ? (
-        <div>
-          <h4>No Data Found!!</h4>
-        </div>
-      ) : (
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={data}>
-            <XAxis dataKey={`${type === "weekly" ? "week" : "date"}`} />
-            <YAxis />
-            <Tooltip
-              content={<CustomTooltip type={type} />}
-              cursor={{ fill: "rgba(59, 130, 246, 0.1)" }}
-            />
-            <Bar dataKey="hours" fill="#3b82f6" />
-          </BarChart>
-        </ResponsiveContainer>
-      )}
-    </div>
+      </CardHeader>
+      <CardContent>
+        {data.length < 1 ? (
+          <div>
+            <h4>No Data Found!!</h4>
+          </div>
+        ) : (
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={data}>
+              <XAxis dataKey={`${type === "weekly" ? "week" : "date"}`} />
+              <YAxis />
+              <Tooltip
+                content={<CustomTooltip type={type} />}
+                cursor={{ fill: "rgba(59, 130, 246, 0.1)" }}
+              />
+              <Bar dataKey="hours" fill="#3b82f6" barSize={barSize} />
+            </BarChart>
+          </ResponsiveContainer>
+        )}
+      </CardContent>
+    </Card>
   );
 };
 

@@ -102,7 +102,7 @@ const MonthlyCalender = ({
               checkHoliday(date) ? "weekend-tile" : ""
             }
             tileContent={tileContent}
-            className="rounded"
+            className="rounded-lg react-calendar"
           />
           {/* Status List with icon */}
           <div className="flex flex-wrap justify-between items-center my-6">

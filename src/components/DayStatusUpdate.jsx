@@ -69,7 +69,7 @@ const DayStatusUpdate = () => {
 
   return (
     <div className="border border-gray rounded p-5">
-      <h4>Set Status</h4>
+      <h6 className="text-left text-sm">Work Status</h6>
       <hr />
       {/* INPUTS */}
       <DayStatusInputs data={submitData} handInputChange={handInputChange} />
