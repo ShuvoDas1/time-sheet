@@ -4,7 +4,16 @@ import "react-calendar/dist/Calendar.css";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useCalendar } from "@/context/CalendarContext";
 import { ButtonWithTooltip } from "./ButtonWithTooltip";
-import { Gift, Umbrella, Briefcase, Heart, Plane } from "lucide-react";
+import {
+  Gift,
+  Umbrella,
+  Briefcase,
+  Heart,
+  Plane,
+  RotateCw,
+  Repeat,
+  CalendarArrowDown,
+} from "lucide-react";
 import MonthDataSelector from "./MonthDataSelectorDialog";
 import RecurringStatus from "./RecurringStatusModal";
 
@@ -64,18 +73,22 @@ const MonthlyCalender = ({
                 Icon={<Briefcase className="text-green-500  w-6 h-6" />}
               />
               <ButtonWithTooltip
-                buttonName="Set Monthly Data"
-                tooltipTitle="Exclude Holiday and Weekend"
+                buttonName="Set This Month Work Status"
+                tooltipTitle="Set all days work status of this month"
                 onClick={() => {
                   setOpenModal((prev) => !prev);
                 }}
+                Icon={
+                  <CalendarArrowDown className="text-purple-500  w-6 h-6" />
+                }
               />
               <ButtonWithTooltip
                 buttonName="Set Recurring Status"
-                tooltipTitle="Exclude Holiday and Weekend"
+                tooltipTitle="Set Recurring work status of this month"
                 onClick={() => {
                   setRecurringOpenModal((prev) => !prev);
                 }}
+                Icon={<Repeat className="text-blue-500  w-6 h-6" />}
               />
             </div>
           </div>
@@ -97,7 +110,7 @@ const MonthlyCalender = ({
               return (
                 <div
                   key={index}
-                  className="flex justify-start items-center mt-4"
+                  className="flex justify-start items-center mt-4  text-sm"
                 >
                   {icon}
                   <span className="ml-1">{title}</span>

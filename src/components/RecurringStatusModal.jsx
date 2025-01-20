@@ -57,8 +57,18 @@ const RecurringStatus = ({ open, onClose }) => {
     }));
   };
 
+  //   Handle Close Button Event
+
+  const handleCloseModal = useCallback(() => {
+    onClose();
+    setDayStatus({
+      day: "",
+      status: "",
+    });
+  }, [setDayStatus, onClose]);
+
   // GET A DAY FOR EVERY WEEK OF SELECTED MONTH
-  const getDayForEveryWeek = () => {
+  const getDayForEveryWeek = useCallback(() => {
     const id = monthKeyGenerate(currentMonth);
     const { day, status } = dayStatus;
     const startOfMonth = moment(id).startOf("month");
@@ -77,7 +87,7 @@ const RecurringStatus = ({ open, onClose }) => {
       ) {
         result.push({
           date: dayOfWeek.format("YYYY-MM-DD"),
-          stattus: status,
+          status: status,
         });
       }
 
@@ -85,7 +95,7 @@ const RecurringStatus = ({ open, onClose }) => {
       current.add(1, "week");
     }
     return result;
-  };
+  }, [currentMonth, dayStatus, monthKeyGenerate]);
 
   //  HANDLE SUBMIT BUTTON EVENT
   const handleSubmitData = useCallback(async () => {
@@ -104,37 +114,34 @@ const RecurringStatus = ({ open, onClose }) => {
     let success = false;
 
     if (data && data?.days.length > 0) {
-      const updatedData = [...data.days];
+      const existingData = [...data.days];
 
       requestData.forEach((item) => {
-        const itemIndex = updatedData.findIndex(
+        const itemIndex = existingData.findIndex(
           (old) => old.date === item?.date
         );
-        if (itemIndex !== -1) updateData[itemIndex] = item;
-        else updatedData.push(item);
+        if (itemIndex !== -1) existingData[itemIndex] = item;
+        else existingData.push(item);
       });
-
-      const { responseStatus } = await updateData({ id, days: updatedData });
+      const { responseStatus } = await updateData({ id, days: existingData });
       success = responseStatus;
     } else {
       const { responseStatus } = await saveData({ id, days: requestData });
       success = responseStatus;
     }
-    console.log(success);
     if (success) {
       handleCloseModal();
     }
-  }, []);
-
-  //   Handle Close Button Event
-
-  const handleCloseModal = () => {
-    onClose();
-    setDayStatus({
-      day: "",
-      status: "",
-    });
-  };
+  }, [
+    dayStatus,
+    currentMonth,
+    getDayForEveryWeek,
+    fetchMonthData,
+    updateData,
+    saveData,
+    handleCloseModal,
+    monthKeyGenerate,
+  ]);
 
   return (
     <Dialog open={open} onOpenChange={onClose}>

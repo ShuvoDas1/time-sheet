@@ -37,6 +37,8 @@ export const CalendarProvider = ({ children }) => {
 
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [loading, setLoading] = useState(false);
+  // const [openMonthlyModal, setOpenMonthlyModal] = useState(false);
+  // const [openRecurringModal, setRecurringOpenModal] = useState(false);
 
   // SET WORK STATUS DATA IN CALENDER
   const setTimeSheetData = useCallback(async () => {
@@ -282,6 +284,10 @@ export const CalendarProvider = ({ children }) => {
         monthKeyGenerate,
         setCurrentMonth,
         currentMonth,
+        // openMonthlyModal,
+        // setOpenMonthlyModal,
+        // openRecurringModal,
+        // setRecurringOpenModal,
       }}
     >
       {children}

@@ -20,6 +20,7 @@ const TimeSheet = () => {
     tileContent,
     monthKeyGenerate,
     setCurrentMonth,
+    currentMonth,
   } = useCalendar();
 
   // SET TIME SHEET DATA
@@ -125,9 +126,9 @@ const TimeSheet = () => {
   // // UPDATE CALENDAR
 
   useEffect(() => {
-    if (selectedMonth) {
-      const key = monthKeyGenerate(selectedMonth);
-
+    if (selectedMonth || currentMonth) {
+      const key = monthKeyGenerate(selectedMonth || currentMonth);
+      console.log("time sheet");
       const { timesheetData = [] } = calendarData;
       if (timesheetData.length > 0) {
         const monthlyData = timesheetData.find(({ id }) => id === key);
@@ -137,7 +138,7 @@ const TimeSheet = () => {
         }));
       }
     }
-  }, [selectedMonth, calendarData?.timesheetData]);
+  }, [selectedMonth, calendarData?.timesheetData, currentMonth]);
 
   // SET EVERY DAY CLASS NAME
 
