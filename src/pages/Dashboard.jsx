@@ -10,6 +10,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { useDashbaord } from "@/context/DashboardContext";
 import React, { useEffect } from "react";
+import { jsPDF } from "jspdf";
+import { FileText } from "lucide-react";
+import autoTable from "jspdf-autotable";
+import { useCalendar } from "@/context/CalendarContext";
+import { toast } from "sonner";
+import moment from "moment";
 
 const Dashboard = () => {
   const {
@@ -19,11 +25,78 @@ const Dashboard = () => {
     setFilters,
   } = useDashbaord();
 
+  const {
+    fetchMonthData,
+    statusList: { working, vacation, sickLeave },
+  } = useCalendar();
+
   useEffect(() => {
     if (filters.type && filters.month) {
       getSummaryData();
     }
   }, [filters]);
+
+  // EXPORT REPORT AS PDF OF SELECTED MONTH
+  const handleExportReport = async () => {
+    const year = new Date().getFullYear();
+    const key = `${year}-${filters.month}`;
+
+    // GET MONTH DATA
+    const { data } = await fetchMonthData(key);
+
+    if (!data || !data?.days.length) return toast("Data was not found!");
+
+    const monthFormat = moment()
+      .month(parseInt(filters.month) - 1)
+      .format("MMMM");
+    const title = `Report of ${monthFormat} - ${year}`;
+
+    const doc = new jsPDF();
+    doc.setFontSize(16);
+    doc.text(title, 70, 10);
+
+    const summaryHead = [["Category", "Total"]];
+    const summaryData = metricsData.reduce((acc, item) => {
+      const data = [item?.title, item?.value];
+      acc.push(data);
+      return acc;
+    }, []);
+
+    autoTable(doc, {
+      startY: 20,
+      head: summaryHead,
+      body: summaryData,
+      theme: "grid",
+      styles: { halign: "center" },
+    });
+
+    // Daily Details Table Data
+    const dayDetailsHead = [["Date", "Status", "Worked Hour / Sick Note"]];
+
+    const dayDetailsBody = data?.days.reduce((acc, item) => {
+      const data = [
+        item?.date,
+        item?.status,
+        item?.status === working
+          ? item?.workHour ?? 8
+          : item?.status === sickLeave
+          ? item?.sickNote
+          : "N/A",
+      ];
+      acc.push(data);
+      return acc;
+    }, []);
+    autoTable(doc, {
+      startY: doc.lastAutoTable.finalY + 10,
+      head: dayDetailsHead,
+      body: dayDetailsBody,
+      theme: "grid",
+      styles: { halign: "center" },
+    });
+
+    // Save the PDF
+    doc.save(`timesheet-report-of-2025-${filters?.month}.pdf`);
+  };
 
   return (
     <div className=" w-full px-4">
@@ -39,14 +112,13 @@ const Dashboard = () => {
             options={months}
             className="w-80"
           />
-          {/* <ButtonWithTooltip
-            buttonName="Export Timesheet Pdf"
+          <ButtonWithTooltip
+            buttonName="Export Pdf"
             tooltipTitle="Export Timesheet Pdf of the selected month"
-            onClick={() => {
-              setRecurringOpenModal((prev) => !prev);
-            }}
-            Icon={<Repeat className="text-blue-500  w-6 h-6" />}
-          /> */}
+            onClick={handleExportReport}
+            Icon={<FileText className="text-blue-500  w-6 h-6" />}
+            disabled={!filters.month}
+          />
         </div>
 
         {/* Key Metrics */}

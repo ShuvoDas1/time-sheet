@@ -32,7 +32,9 @@ export const DashboardProvier = ({ children }) => {
       if (!type || !month) {
         throw new Error("Invalid Request!");
       }
-      const id = `2025-${month}`;
+      const year = new Date().getFullYear();
+      const id = `${year}-${month}`;
+
       const { data } = await axios.get(`http://localhost:3001/timesheet/${id}`);
 
       if (!data || data?.days.length < 1) {
@@ -148,11 +150,13 @@ export const DashboardProvier = ({ children }) => {
     // const { vacation, sickLeave, working } = statusList;
 
     // TOTAL WORK HOURS OF THIS MONTH
-    const totalWorkHours = data.reduce(
-      (acc, currentItem) =>
-        acc + (parseFloat(currentItem.workHour) || DEFAULT_WORK_HOURS),
-      0
-    );
+    const totalWorkHours = data.reduce((acc, currentItem) => {
+      let hour = 0;
+      if (currentItem?.status === working) {
+        hour = parseFloat(currentItem.workHour) || DEFAULT_WORK_HOURS;
+      }
+      return acc + hour;
+    }, 0);
 
     // TOTAL VACATION DAYS OF THIS MONTH
     const numberOfVacations = data.reduce(

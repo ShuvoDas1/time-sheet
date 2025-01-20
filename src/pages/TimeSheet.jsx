@@ -128,7 +128,7 @@ const TimeSheet = () => {
   useEffect(() => {
     if (selectedMonth || currentMonth) {
       const key = monthKeyGenerate(selectedMonth || currentMonth);
-      console.log("time sheet");
+
       const { timesheetData = [] } = calendarData;
       if (timesheetData.length > 0) {
         const monthlyData = timesheetData.find(({ id }) => id === key);

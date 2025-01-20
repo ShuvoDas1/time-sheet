@@ -33,7 +33,7 @@ const BarChartComponent = ({ data = [] }) => {
           >
             <TabsList>
               <TabsTrigger value="weekly">Weekly</TabsTrigger>
-              <TabsTrigger value="monthly">Monthly</TabsTrigger>
+              <TabsTrigger value="daily">Daily</TabsTrigger>
             </TabsList>
           </Tabs>
         )}

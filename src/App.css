@@ -4,7 +4,6 @@
   text-align: center;
 }
 
-
 .card {
   padding: 2em;
 }
@@ -28,7 +27,6 @@
   width: 80px;
 }
 
-
 .layout-main {
   flex: 1;
   padding: 20px;
@@ -48,7 +46,7 @@
 
 /*Calender styles */
 
-.react-calendar{
+.react-calendar {
   width: 100% !important;
   padding: 15px 0;
 }
@@ -69,11 +67,11 @@
 
 /* Remove red color from weekends */
 .react-calendar__month-view__days__day--weekend {
-  color: inherit !important;  
+  color: inherit !important;
   /* background-color: inherit !important;   */
 }
 
-.tile{
+.tile {
   font-size: 15px !important;
   font-weight: bold !important;
 }
@@ -107,3 +105,16 @@
 .green-border {
   border: 2px solid green !important;
 } */
+
+/* MONTH WORK STATUS SELE */
+
+.selected_item {
+  background: #91bfbe !important; /* Green */
+  color: white !important;
+  /* border-radius: 50%; */
+}
+
+.holiday_weekend_item {
+  background: #989c9b !important;
+  color: white !important;
+}
