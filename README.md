@@ -99,7 +99,3 @@ The Timesheet Application is a React-based web app designed to help users log da
 - Implementing a dynamic calendar with custom statuses.
 - Optimizing responsive design for diverse screen sizes.
 
-## Future Enhancements
-- Integration with a real backend API.
-- Multi-language support.
-- Advanced filtering and search capabilities for analytics.
