@@ -50,9 +50,9 @@ const MonthlyCalender = ({
   setAllAsWorkingDay,
 }) => {
   const { checkHoliday, setCurrentMonth } = useCalendar();
-
   const [openModal, setOpenModal] = useState(false);
   const [openRecurringModal, setRecurringOpenModal] = useState(false);
+  const currentYear = new Date().getFullYear();
 
   return (
     <>
@@ -103,6 +103,8 @@ const MonthlyCalender = ({
             }
             tileContent={tileContent}
             className="rounded-lg react-calendar"
+            minDate={new Date(currentYear, 0, 1)}
+            maxDate={new Date(currentYear, 11, 31)}
           />
           {/* Status List with icon */}
           <div className="flex flex-wrap justify-between items-center my-6">

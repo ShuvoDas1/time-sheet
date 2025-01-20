@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "server": "json-server --watch db/db.json --port 3001"
+    "server": "json-server --watch db/db.json --port 3001",
+    "start": "npm run dev"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.4",
