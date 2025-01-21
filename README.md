@@ -17,7 +17,7 @@ The Timesheet Application is a React-based web app designed to help users log da
 - Icon indicators for each status.
 - Edit previously logged statuses.
 
-### 2. Timesheet Submission a
+### 2. Timesheet Submission 
 
 - User can submit all days as a working day, excluding holidays and weekends..
 - User can submit recurring status for a specific day of the month..
