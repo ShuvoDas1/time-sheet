@@ -155,7 +155,11 @@ const RecurringStatus = ({ open, onClose }) => {
             {daysList.map(({ title, value }, index) => {
               return (
                 <div className="flex items-center space-x-2" key={index}>
-                  <RadioGroupItem value={value} id={title} className="p-0" />
+                  <RadioGroupItem
+                    value={value}
+                    id={title}
+                    className="p-0 dark:bg-gray-800 dark:checked:bg-blue-500 dark:border-gray-600"
+                  />
                   <Label htmlFor={title}>{title}</Label>
                 </div>
               );

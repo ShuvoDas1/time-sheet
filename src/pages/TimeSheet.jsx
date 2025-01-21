@@ -30,7 +30,7 @@ const TimeSheet = () => {
     if (!timesheetData || timesheetData.length < 1) {
       setTimeSheetData();
     }
-  }, [calendarData, setTimeSheetData]);
+  }, [setTimeSheetData]);
 
   // Format date function y-MM-DD
   const formatDate = (date) => {
@@ -123,7 +123,7 @@ const TimeSheet = () => {
     }
   };
 
-  // // UPDATE CALENDAR
+  //  UPDATE CALENDAR
 
   useEffect(() => {
     if (selectedMonth || currentMonth) {
@@ -139,8 +139,6 @@ const TimeSheet = () => {
       }
     }
   }, [selectedMonth, calendarData?.timesheetData, currentMonth]);
-
-  // SET EVERY DAY CLASS NAME
 
   return (
     <div className="flex flex-wrap">

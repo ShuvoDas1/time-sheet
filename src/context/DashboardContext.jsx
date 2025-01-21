@@ -47,9 +47,9 @@ export const DashboardProvier = ({ children }) => {
       let barChartData = null;
 
       if (type === "weekly") {
-        barChartData = calculateWeeklyWorkHours(days);
+        barChartData = calculateWeeklyWorkHours(year, month, days);
       } else {
-        barChartData = calculateDailyWorkHours(days);
+        barChartData = calculateDailyWorkHours(year, month, days);
       }
 
       const metricsData = calculateMetricsData(days);
@@ -99,48 +99,79 @@ export const DashboardProvier = ({ children }) => {
   };
 
   //   CALCULATE DAILY WORKED HOURS
-  const calculateDailyWorkHours = (data) => {
-    return data
-      .map((item, index) => {
-        if (item?.status === working) {
-          return {
-            date: moment(item?.date).format("DD"),
-            hours: item?.workHour || DEFAULT_WORK_HOURS,
-            tooltipDate: moment(item?.date).format("MMMM Do YYYY"),
-          };
-        }
-      })
-      .filter(Boolean);
+  const calculateDailyWorkHours = (year, month, data) => {
+    const daysInMonth = moment(`${year}-${month}`, "YYYY-MM").daysInMonth();
+    const monthData = [];
+    for (let day = 1; day <= daysInMonth; day++) {
+      const formattedDate = moment({ year, month: month - 1, day }).format(
+        "YYYY-MM-DD"
+      );
+      const item = data.find((item) => item?.date === formattedDate);
+
+      const dayData = {
+        date: moment(formattedDate).format("DD"),
+        tooltip: {
+          status: item?.status || "",
+          date: moment(formattedDate).format("Do MMMM YYYY"),
+        },
+      };
+      if (item)
+        dayData.hours =
+          item?.status === working ? item.workHour || DEFAULT_WORK_HOURS : 0;
+
+      monthData.push(dayData);
+    }
+    console.log(monthData);
+    return monthData;
   };
 
-  //   CALCULATE WEEKLY WORKED HOURS
-  const calculateWeeklyWorkHours = (data) => {
-    // Default work hours per day
+  // GET WEEKLY WORK HOURS OF A MONTH
+
+  const calculateWeeklyWorkHours = (year, month, data) => {
+    const firstDayOfMonth = moment({ year, month: month - 1, day: 1 });
+    const lastDayOfMonth = firstDayOfMonth.clone().endOf("month");
+
+    const allWeeks = [];
+    let currentWeekStart = firstDayOfMonth.clone().startOf("week");
+    while (currentWeekStart.isSameOrBefore(lastDayOfMonth)) {
+      const startOfWeek = currentWeekStart.format("MMMM Do");
+      const endOfWeek = currentWeekStart
+        .clone()
+        .endOf("week")
+        .format("MMMM Do");
+      const weekRange = `${startOfWeek} - ${endOfWeek}`;
+      allWeeks.push(weekRange);
+      currentWeekStart.add(1, "week");
+    }
 
     const weeklyHours = data.reduce((acc, day) => {
-      //   const weekNumber = moment(day.date).week();
-      const startOfWeek = moment(day?.date).startOf("week").format("MMMM Do");
-      const endOfWeek = moment(day?.date).endOf("week").format("MMMM Do");
-      const weekRange = `${startOfWeek}-${endOfWeek}`;
+      const dayMoment = moment(day?.date);
 
-      if (day.status === working) {
-        const workHours = day.workHour
-          ? parseFloat(day.workHour)
-          : DEFAULT_WORK_HOURS;
+      if (
+        dayMoment.isSameOrAfter(firstDayOfMonth) &&
+        dayMoment.isSameOrBefore(lastDayOfMonth)
+      ) {
+        const startOfWeek = dayMoment.startOf("week").format("MMMM Do");
+        const endOfWeek = dayMoment.endOf("week").format("MMMM Do");
+        const weekRange = `${startOfWeek} - ${endOfWeek}`;
 
-        acc[weekRange] = (acc[weekRange] || 0) + workHours;
+        if (day.status === working) {
+          const workHours = day.workHour
+            ? parseFloat(day.workHour)
+            : DEFAULT_WORK_HOURS;
+
+          acc[weekRange] = (acc[weekRange] || 0) + workHours;
+        }
       }
 
       return acc;
     }, {});
 
-    const modifyData = Object.entries(weeklyHours).map(
-      ([weekRange, hours], index) => ({
-        week: `Week-${index + 1}`,
-        hours,
-        tooltipDate: weekRange,
-      })
-    );
+    const modifyData = allWeeks.map((weekRange, index) => ({
+      week: `Week-${index + 1}`,
+      hours: weeklyHours[weekRange] || 0,
+      tooltipDate: weekRange,
+    }));
 
     return modifyData;
   };

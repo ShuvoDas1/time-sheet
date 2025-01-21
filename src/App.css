@@ -131,22 +131,48 @@
   border-color: #e5e7eb !important; /* Light border */
 }
 
-.light .react-calendar__tile--active {
-  background-color: #3b82f6 !important; /* Blue for active tile */
-  color: #fff !important; /* White text for active tile */
-}
+/* .light .react-calendar__tile--active {
+  background-color: #3b82f6 !important; 
+  color: black !important;
+  background-color: white !important;
+} */
 
 /* Dark Mode */
 .dark .react-calendar {
-  background-color: #1a202c !important; /* Dark background */
-  color: #f7fafc !important; /* Light text */
+  background-color: #1a202c !important;
+  color: #f7fafc !important;
 }
 
 .dark .react-calendar__tile {
-  border-color: #2d3748 !important; /* Darker border */
+  border-color: #2d3748 !important;
 }
 
 .dark .react-calendar__tile--active {
-  background-color: #38bdf8 !important; /* Light blue for active tile */
-  color: #fff !important; /* White text for active tile */
+  background-color: #38bdf8 !important;
+  color: #fff !important;
+}
+
+/* .react-calendar__tile--now {
+  color: black !important;
+  background-color: whitesmoke !important;
+  border: 2px solid lightgray !important;
+} */
+
+.light .not_selected_item {
+  background: white !important;
+  color: black !important;
+}
+
+.dark .not_selected_item {
+  background-color: #1a202c !important;
+  color: white !important;
+}
+
+.dark .react-calendar__navigation__arrow {
+  background-color: #1a202c !important;
+  color: white !important;
+}
+
+.dark svg {
+  background-color: black !important;
 }

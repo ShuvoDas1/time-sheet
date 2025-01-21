@@ -64,7 +64,7 @@ const MonthDataSelector = ({ open, onClose }) => {
     }
 
     return () => (mount = false);
-  }, []);
+  }, [onClose]);
 
   // SET MONTH INFORATION
   useEffect(() => {
@@ -127,6 +127,8 @@ const MonthDataSelector = ({ open, onClose }) => {
     if (selectedDates.includes(dateString)) className = "selected_item";
     else if (checkHoliday(date) || date.getDay() === weekendDay) {
       className = "holiday_weekend_item";
+    } else {
+      className = "not_selected_item";
     }
     return className;
   };
@@ -194,12 +196,16 @@ const MonthDataSelector = ({ open, onClose }) => {
   }, [submitData]);
 
   return (
-    <Dialog open={open} onOpenChange={onClose}>
+    <Dialog
+      open={open}
+      onOpenChange={onClose}
+      className="month_work_status_container"
+    >
       <DialogContent className="sm:max-w-[600px] w-full">
         <DialogHeader>
-          <DialogTitle>Select a date</DialogTitle>
+          <DialogTitle>Select date</DialogTitle>
           <DialogDescription>
-            Choose a date from the calendar below.
+            Choose multiple from the calendar below.
           </DialogDescription>
         </DialogHeader>
         <div>

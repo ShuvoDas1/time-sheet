@@ -1,4 +1,11 @@
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+} from "recharts";
 import { useDashbaord } from "@/context/DashboardContext";
 import { useEffect, useState } from "react";
 import {
@@ -78,6 +85,20 @@ const PieChartComponent = ({ data }) => {
                   <Tooltip
                   // content={<CustomTooltip type={type} />}
                   // cursor={{ fill: "rgba(59, 130, 246, 0.1)" }}
+                  />
+                  <Legend
+                    verticalAlign="bottom"
+                    height={36}
+                    payload={data.map((item) => ({
+                      value: item.type,
+                      type: "square",
+                      color:
+                        item?.type === "working"
+                          ? COLORS[0]
+                          : item?.type === "vacation"
+                          ? COLORS[1]
+                          : COLORS[2],
+                    }))}
                   />
                 </PieChart>
               </ResponsiveContainer>
