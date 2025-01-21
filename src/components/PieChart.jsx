@@ -89,7 +89,7 @@ const PieChartComponent = ({ data }) => {
                   <Legend
                     verticalAlign="bottom"
                     height={36}
-                    payload={data.map((item) => ({
+                    payload={data?.map((item) => ({
                       value: item.type,
                       type: "square",
                       color:
